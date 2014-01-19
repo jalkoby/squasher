@@ -3,24 +3,20 @@ require 'yaml'
 
 module Squasher
   class Config
-    def initialize(root_path)
-      @root_path = root_path
+    def initialize
+      @root_path = Dir.pwd
     end
 
     def schema_file
-      @schema_file ||= root_path('db', 'schema.rb')
+      @schema_file ||= from_root('db', 'schema.rb')
     end
 
     def migration_files
       Dir.glob(File.join(migrations_folder, '**.rb'))
     end
 
-    def migration_file(version)
-      File.join(migrations_folder, "#{ version }_#{ migration_name }.rb")
-    end
-
-    def migration_name(human = false)
-      human ? 'InitSchema' : 'init_schema'
+    def migration_file(timestamp, migration_name)
+      File.join(migrations_folder, "#{ timestamp }_#{ migration_name }.rb")
     end
 
     def migrations_folder?
@@ -52,20 +48,18 @@ module Squasher
 
     private
 
-    def root_path(*subfolders)
-      if subfolders.empty?
-        @root_path
-      else
-        File.join(@root_path, *subfolders)
-      end
+    attr_reader :root_path
+
+    def from_root(*subfolders)
+      File.join(root_path, *subfolders)
     end
 
     def migrations_folder
-      @migrations_folder ||= root_path('db', 'migrate')
+      @migrations_folder ||= from_root('db', 'migrate')
     end
 
     def dbconfig_file
-      @dbconfig_file ||= root_path('config', 'database.yml')
+      @dbconfig_file ||= from_root('config', 'database.yml')
     end
 
     def dbconfig

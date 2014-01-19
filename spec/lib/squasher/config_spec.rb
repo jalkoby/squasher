@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 describe Squasher::Config do
-  let(:fake_root) { File.join(Dir.pwd, 'spec/fake_app') }
-  let(:config)    { described_class.new(fake_root) }
+  let(:config)    { described_class.new }
 
   context '.dbconfig?' do
     subject(:result) { config.dbconfig? }
@@ -54,5 +53,5 @@ describe Squasher::Config do
     end
   end
 
-  specify { expect(config.migration_file(1230)).to eq(File.join(fake_root, 'db', 'migrate', '1230_init_schema.rb')) }
+  specify { expect(config.migration_file(1230, :sample)).to eq(File.join(fake_root, 'db', 'migrate', '1230_sample.rb')) }
 end

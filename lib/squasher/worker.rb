@@ -15,21 +15,22 @@ module Squasher
     def process
       check!
 
-      under_squash_env do
-        File.open(config.migration_file(finish_timestamp), 'wb') do |stream|
-          stream << ::Squasher::Render.render(config)
+      result = under_squash_env do
+        File.open(config.migration_file(finish_timestamp, :init_schema), 'wb') do |stream|
+          stream << ::Squasher::Render.render(:init_schema, config)
         end
 
         migrations.each { |file| FileUtils.rm(file) }
 
-        rake("db:drop") unless Squasher.ask(:keep_database)
+        Squasher.rake("db:drop") unless Squasher.ask(:keep_database)
       end
+      Squasher.clean if result && Squasher.ask(:apply_clean)
     end
 
     private
 
     def config
-      @config ||= ::Squasher::Config.new(Dir.pwd)
+      @config ||= ::Squasher::Config.new
     end
 
     def check!
@@ -63,15 +64,11 @@ module Squasher
 
     def under_squash_env
       config.stub_dbconfig do
-        if rake("db:drop db:create", :db_create) && rake("db:migrate VERSION=#{ finish_timestamp }", :db_migrate)
+        if Squasher.rake("db:drop db:create", :db_create) &&
+          Squasher.rake("db:migrate VERSION=#{ finish_timestamp }", :db_migrate)
           yield
         end
       end
-    end
-
-    def rake(command, description = nil)
-      Squasher.tell(description) if description
-      system("bundle exec rake #{ command }")
     end
   end
 end

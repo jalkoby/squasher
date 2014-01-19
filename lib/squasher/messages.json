@@ -1,6 +1,8 @@
 {
   "keep_database" : "Squasher created `:green{squasher}` database for it needs.\nIt might be useful if some deleted migration insert data into database.\nLeft it(:green{yes} / :red{no})?",
 
+  "apply_clean": "Do you want to clean your database from an old schema migrations records(:red{yes}/:green{no})?",
+
   "migration_folder_missing" : "The folder with migrations is missing.\nAre you sure in the :red{root of a rails} application?",
 
   "no_migrations" : "There are no migrations in the folder prior :red{:date}",
@@ -9,5 +11,9 @@
 
   "db_create": "Squasher is creating a tmp database",
 
-  "db_migrate": "Squasher is appling migrations on a tmp database"
+  "db_migrate": "Squasher is appling a migrations on a tmp database",
+
+  "db_cleaning": "Squasher is appling a clean migration",
+
+  "usage": "Example usage:\n  :green{squasher} :yellow{year[/month][/day]} #squash a migrations prior to a specified date\n  :green{squasher} :yellow{clean}              #generate or update a cleaning migration\n  :green{squasher} :yellow{info}               #show this message"
 }

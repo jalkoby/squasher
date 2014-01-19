@@ -1,4 +1,4 @@
-class <%= migration_name %> < ActiveRecord::Migration
+class InitSchema < ActiveRecord::Migration
   def up
     <%- each_schema_line do |line| -%>
     <%= line %>

@@ -6,18 +6,15 @@ module Squasher
       new(*args).render
     end
 
-    attr_reader :config
+    attr_reader :name, :config
 
-    def initialize(config)
+    def initialize(name, config)
+      @name = name
       @config = config
     end
 
     def render
-      ERB.new(template('migration.rb'), nil, '-').result(binding)
-    end
-
-    def migration_name
-      config.migration_name(:human)
+      ERB.new(template("#{ name }.rb"), nil, '-').result(binding)
     end
 
     def each_schema_line
