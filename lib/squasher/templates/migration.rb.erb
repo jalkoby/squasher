@@ -1,0 +1,11 @@
+class <%= migration_name %> < ActiveRecord::Migration
+  def up
+    <%- each_schema_line do |line| -%>
+    <%= line %>
+    <%- end -%>
+  end
+
+  def down
+    raise "Can not revert initial migration"
+  end
+end

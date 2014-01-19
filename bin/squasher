@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'squasher'
+
+Squasher.squash(ARGV[0])

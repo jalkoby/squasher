@@ -1,0 +1,8 @@
+development:
+  database: app_development
+  user: root
+  password: password
+test:
+  database: app_test
+  user: root
+  password: password
