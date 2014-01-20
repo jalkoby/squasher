@@ -31,10 +31,10 @@ describe Squasher::Worker do
     worker = described_class.new(Time.new(2014))
     worker.stub(:under_squash_env).and_yield.and_return(true)
     new_migration_path = File.join(Dir.tmpdir, 'init_schema.rb')
-    Squasher::Config.any_instance.stub(:migration_file).with('2013122900', :init_schema).and_return(new_migration_path)
+    Squasher::Config.any_instance.stub(:migration_file).with('20131213090719', :init_schema).and_return(new_migration_path)
 
-    FileUtils.should_receive(:rm).with(File.join(fake_root, 'db', 'migrate', '201312090000_first_migration.rb'))
-    FileUtils.should_receive(:rm).with(File.join(fake_root, 'db', 'migrate', '2013122900_second_migration.rb'))
+    FileUtils.should_receive(:rm).with(File.join(fake_root, 'db', 'migrate', '20131205160936_first_migration.rb'))
+    FileUtils.should_receive(:rm).with(File.join(fake_root, 'db', 'migrate', '20131213090719_second_migration.rb'))
     Squasher.should_receive(:ask).with(:keep_database).and_return(false)
     Squasher.should_receive(:rake).with("db:drop")
     Squasher.should_receive(:ask).with(:apply_clean).and_return(true)
