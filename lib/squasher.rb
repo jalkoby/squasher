@@ -1,5 +1,3 @@
-require 'json'
-
 module Squasher
   extend self
 
@@ -44,6 +42,8 @@ module Squasher
 
   def messages
     return @messages if @messages
+
+    require 'json'
     path = File.join(File.dirname(__FILE__), 'squasher/messages.json')
     @messages = JSON.load(File.open(path))
   end

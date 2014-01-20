@@ -1,5 +1,5 @@
 {
-  "keep_database" : "Squasher created `:green{squasher}` database for it needs.\nIt might be useful if some deleted migration insert data into database.\nLeft it(:green{yes} / :red{no})?",
+  "keep_database" : "Squasher created `:green{squasher}` database for it needs.\nIt might be useful if some deleted migration insert data into a database.\nLeft it(:green{yes} / :red{no})?",
 
   "apply_clean": "Do you want to clean your database from an old schema migrations records(:red{yes}/:green{no})?",
 
@@ -15,5 +15,5 @@
 
   "db_cleaning": "Squasher is appling a clean migration",
 
-  "usage": "Example usage:\n  :green{squasher} :yellow{year[/month][/day]} #squash a migrations prior to a specified date\n  :green{squasher} :yellow{clean}              #generate or update a cleaning migration\n  :green{squasher} :yellow{info}               #show this message"
+  "usage": "Example usage:\n  :green{squasher} :yellow{year[/month][/day]} #squash migrations prior to a specified date\n  :green{squasher} :yellow{clean}              #generate or update a cleaning migration and apply it\n  :green{squasher} :yellow{info}               #show this message"
 }
