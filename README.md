@@ -4,7 +4,7 @@
 [![Code Climate](https://codeclimate.com/github/jalkoby/squasher.png)](https://codeclimate.com/github/jalkoby/squasher)
 [![Gem Version](https://badge.fury.io/rb/squasher.png)](http://badge.fury.io/rb/squasher)
 
-Squasher is a compressor of the old migrations in a rails application. If you works on the big project with lots of migrations every `rake db:migrate` takes a few seconds, creating of a new database might takes a few minutes. It's just because rails loads all this files. Squasher instead removes all this migrations and creates a single migration with a final database state of the specified date(a new migration will look like a schema).
+Squasher is a compressor of the old migrations in a rails application. If you work on the big project with lots of migrations every `rake db:migrate` takes a few seconds, creating of a new database might takes a few minutes. It's just because rails loads all this files. Squasher instead removes all this migrations and creates a single migration with a final database state of the specified date(a new migration will look like a schema).
 
 ## Installation
 
