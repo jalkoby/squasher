@@ -1,13 +1,13 @@
 {
-  "keep_database" : "Squasher created `:green{squasher}` database for it needs.\nIt might be useful if some deleted migration insert data into a database.\nLeft it(:green{yes} / :red{no})?",
+  "keep_database" : "Squasher created `:green<squasher>` database for it needs.\nIt might be useful if some deleted migration insert data into a database.\nLeft it(:green<yes> / :red<no>)?",
 
-  "apply_clean": "Do you want to clean your database from an old schema migrations records(:red{yes}/:green{no})?",
+  "apply_clean": "Do you want to clean your database from an old schema migrations records(:red<yes>/:green<no>)?",
 
-  "migration_folder_missing" : "The folder with migrations is missing.\nAre you sure in the :red{root of a rails} application?",
+  "migration_folder_missing" : "The folder with migrations is missing.\nAre you sure in the :red<root of a rails> application?",
 
-  "no_migrations" : "There are no migrations in the folder prior :red{:date}",
+  "no_migrations" : "There are no migrations in the folder prior :red<%{date}>",
 
-  "dbconfig_invalid" : "Squasher could not find `:green{database.yml}` with working development environment",
+  "dbconfig_invalid" : "Squasher could not find `:green<database.yml>` with working development environment",
 
   "db_create": "Squasher is creating a tmp database",
 

@@ -29,7 +29,7 @@ module Squasher
   def tell(key, options = {})
     message = messages.fetch(key.to_s)
     message = colorize(message)
-    options.each { |key, value| message.gsub!(":#{ key }", value) }
+    message = message % options
     puts message
   end
 
@@ -49,7 +49,7 @@ module Squasher
   end
 
   def colorize(message)
-    message.gsub(/\:(\w+)\{([^}]+)\}/) do |match|
+    message.gsub(/\:(\w+)\<([^>]+)\>/) do |match|
       color_code = { "red" => "031", "green" => "032", "yellow" => "033" }[$1]
       "\033[#{ color_code }m#{ $2 }\033[039m"
     end
