@@ -45,7 +45,7 @@ module Squasher
     def migrations
       return @migrations if @migrations
 
-      @migrations = config.migration_files.select { |file| before_date?(get_timestamp(file)) }
+      @migrations = config.migration_files.select { |file| before_date?(get_timestamp(file)) }.sort
     end
 
     def get_timestamp(file)
