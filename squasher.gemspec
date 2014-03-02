@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["mail@sergeyp.me"]
   spec.description   = %q{Squash your old migrations}
   spec.summary       = %q{Squash your old migrations}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/jalkoby/squasher"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
