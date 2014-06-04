@@ -1,5 +1,6 @@
 development:
   database: app_development
+  encoding: <%= "8-ftu".reverse %>
   user: root
   password: password
 test:

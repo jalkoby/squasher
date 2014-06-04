@@ -27,9 +27,9 @@ describe Squasher::Config do
     it 'add required db config file' do
       config.stub_dbconfig do
         File.open(File.join(fake_root, 'config', 'database.yml')) do |stream|
-          content = stream.read
-          expect(content).to include ("database: squasher")
-          expect(content).to include("development:")
+          content = YAML.load(stream.read)
+          expect(content["development"]["database"]).to eq("squasher")
+          expect(content["development"]["encoding"]).to eq("utf-8")
         end
       end
     end

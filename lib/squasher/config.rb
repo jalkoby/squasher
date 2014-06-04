@@ -66,7 +66,8 @@ module Squasher
       return @dbconfig if defined?(@dbconfig)
       return @dbconfig = nil unless File.exists?(dbconfig_file)
 
-      @dbconfig = YAML.load_file(dbconfig_file)['development']
+      content = ERB.new(File.read(dbconfig_file)).result(binding)
+      @dbconfig = YAML.load(content)['development']
       if @dbconfig && !@dbconfig.empty?
         @dbconfig['database'] = 'squasher'
         @dbconfig = { 'development' => @dbconfig }
