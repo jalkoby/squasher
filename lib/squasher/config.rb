@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'yaml'
+require 'erb'
 
 module Squasher
   class Config
