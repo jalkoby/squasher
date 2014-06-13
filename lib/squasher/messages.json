@@ -15,5 +15,5 @@
 
   "db_cleaning": "Squasher is applying a clean migration",
 
-  "usage": "Example usage:\n  :green{squasher} :yellow{year[/month][/day]} #squash migrations prior to a specified date\n  :green{squasher} :yellow{clean}              #generate or update a cleaning migration and apply it\n  :green{squasher} :yellow{info}               #show this message"
+  "usage": "Example usage:\n  :green<squasher> :yellow<year[/month][/day]> #squash migrations prior to a specified date\n  :green<squasher> :yellow<clean>              #generate or update a cleaning migration and apply it\n  :green<squasher> :yellow<info>               #show this message"
 }
