@@ -30,6 +30,8 @@ describe Squasher::Config do
           content = YAML.load(stream.read)
           expect(content["development"]["database"]).to eq("squasher")
           expect(content["development"]["encoding"]).to eq("utf-8")
+          expect(content["another_development"]["database"]).to eq("squasher")
+          expect(content["another_development"]["encoding"]).to eq("utf-8")
         end
       end
     end
