@@ -3,8 +3,8 @@ class SquasherClean < ActiveRecord::Migration
   end
 
   def up
-    migrations = Dir.glob(File.join(File.dirname(__FILE__), '**.rb'))
-    versions = migrations.map { |file| file.split('/').last[/\A\d+/] }
+    migrations = Dir.glob(File.join(File.dirname(__FILE__), '*.rb'))
+    versions = migrations.map { |file| File.basename(file)[/\A\d+/] }
     SchemaMigration.where("version NOT IN (?)", versions).delete_all
   end
 
