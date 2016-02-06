@@ -18,7 +18,7 @@ module Squasher
 
   def rake(command, description = nil)
     tell(description) if description
-    system("bundle exec rake #{ command } 2>/dev/null")
+    system("bundle exec rake #{ command }")
   end
 
   def ask(*args)
