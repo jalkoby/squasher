@@ -215,6 +215,14 @@ Style/Send:
     may overlap with existing methods.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#prefer-public-send
   Enabled: false
+Style/SpaceInsideStringInterpolation:
+  Description: Checks spacing around interpolated expressions
+  StyleGuide: https://github.com/bbatsov/ruby-style-guide#pad-string-interpolation
+  Enabled: true
+  EnforcedStyle: space
+  SupportedStyles:
+    - space
+    - no_space
 Style/SpecialGlobalVars:
   Description: Avoid Perl-style global variables.
   StyleGuide: https://github.com/bbatsov/ruby-style-guide#no-cryptic-perlisms
