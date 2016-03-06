@@ -6,6 +6,6 @@ class InitSchema < ActiveRecord::Migration
   end
 
   def down
-    raise "Can not revert initial migration"
+    raise ActiveRecord::IrreversibleMigration, "Cannot revert initial migration"
   end
 end
