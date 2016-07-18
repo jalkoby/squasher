@@ -58,13 +58,14 @@ module Squasher
       return @dbconfig if defined?(@dbconfig)
       return @dbconfig = nil unless File.exists?(dbconfig_file)
 
+      @dbconfig = nil
+
       begin
-        content = File.read(dbconfig_file).gsub(/database: (.+)/, 'database: squasher')
-        parsed_content = ERB.new(content).result(binding)
-        @dbconfig = YAML.load(parsed_content)
-        @dbconfig = nil unless @dbconfig.keys.include?('development')
+        content = YAML.load(ERB.new(File.read(dbconfig_file)).result(binding))
+        if content.has_key?('development')
+          @dbconfig = { 'development' => content['development'].merge('database' => 'squasher') }
+        end
       rescue
-        @dbconfig = nil
       end
       @dbconfig
     end
