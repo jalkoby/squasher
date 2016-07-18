@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
 require 'squasher'
 
-case ARGV[0]
-when 'clean'   then Squasher.clean
-when /\A\d{4}/ then Squasher.squash(ARGV[0])
+if ARGV[0] == 'clean'
+  Squasher.clean
+elsif ARGV[-1] =~ /\A\d{4}/
+  Squasher.squash(ARGV[-1], ARGV[0...-1])
 else
   Squasher.tell(:usage)
 end

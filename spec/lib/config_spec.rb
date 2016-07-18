@@ -7,19 +7,19 @@ describe Squasher::Config do
     subject(:result) { config.dbconfig? }
 
     it 'a file is exists and it has a valid content' do
-      expect(result).to be_true
+      expect(result).to be_truthy
     end
 
     it 'a file is exists but doesnt have a valid content' do
-      config.stub(:dbconfig_file => File.join(fake_root, 'config', 'invalid_database.yml'))
+      allow(config).to receive(:dbconfig_file).and_return(File.join(fake_root, 'config', 'invalid_database.yml'))
 
-      expect(result).to be_false
+      expect(result).to be_falsey
     end
 
     it 'a file is not exists' do
-      config.stub(:dbconfig_file => File.join(fake_root, 'config', 'not_existed.yml'))
+      allow(config).to receive(:dbconfig_file).and_return(File.join(fake_root, 'config', 'not_existed.yml'))
 
-      expect(result).to be_false
+      expect(result).to be_falsey
     end
   end
 
@@ -39,14 +39,14 @@ describe Squasher::Config do
     it 'recover original schema and db config files if some error raised' do
       begin
         config.stub_dbconfig do
-          expect(file_exists?('config', 'database.yml')).to be_true
-          expect(file_exists?('config', 'database.yml.sbackup')).to be_true
+          expect(file_exists?('config', 'database.yml')).to be_truthy
+          expect(file_exists?('config', 'database.yml.sq')).to be_truthy
 
           raise RuntimeError, "Unexpected system error"
         end
       rescue RuntimeError
-        expect(file_exists?('config', 'database.yml')).to be_true
-        expect(file_exists?('config', 'database.yml.sbackup')).to be_false
+        expect(file_exists?('config', 'database.yml')).to be_truthy
+        expect(file_exists?('config', 'database.yml.sq')).to be_falsey
       end
     end
 

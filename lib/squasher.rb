@@ -6,10 +6,19 @@ module Squasher
   autoload :Render,  'squasher/render'
   autoload :Worker,  'squasher/worker'
 
-  def squash(raw_date)
+  def squash(raw_date, raw_options)
     parts = raw_date.to_s.split('/').map(&:to_i)
     date = Time.new(*parts)
-    Worker.process(date)
+
+    options = raw_options.map do |o|
+      o = o.gsub('-', '').to_sym
+      unless Worker::OPTIONS.include?(o)
+        tell(:wrong_option, o: o)
+        error(:usage)
+      end
+      o
+    end
+    Worker.process(date, options)
   end
 
   def clean
@@ -28,9 +37,9 @@ module Squasher
 
   def tell(key, options = {})
     message = messages.fetch(key.to_s)
+    message = message.join("\n") if message.is_a?(Array)
     message = colorize(message)
-    message = message % options
-    puts message
+    puts message % options
   end
 
   def error(*args)
@@ -48,10 +57,9 @@ module Squasher
     @messages = JSON.load(File.open(path))
   end
 
+  COLORS = ['red', 'green', 'yellow', 'blue'].each_with_index.inject({}) { |r, (k, i)| r.merge!(k => "03#{ i + 1 }") }
+
   def colorize(message)
-    message.gsub(/\:(\w+)\<([^>]+)\>/) do |match|
-      color_code = { "red" => "031", "green" => "032", "yellow" => "033" }[$1]
-      "\033[#{ color_code }m#{ $2 }\033[039m"
-    end
+    message.gsub(/\:(\w+)\<([^>]+)\>/) { |_| "\033[#{ COLORS[$1] }m#{ $2 }\033[039m" }
   end
 end

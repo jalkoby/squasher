@@ -2,28 +2,35 @@ require 'fileutils'
 
 module Squasher
   class Worker
-    attr_reader :date
+    OPTIONS = [:d, :r]
+
+    attr_reader :date, :options
 
     def self.process(*args)
       new(*args).process
     end
 
-    def initialize(date)
+    def initialize(date, options = [])
       @date = date
+      @options = options
     end
 
     def process
       check!
 
       result = under_squash_env do
-        File.open(config.migration_file(finish_timestamp, :init_schema), 'wb') do |stream|
-          stream << ::Squasher::Render.render(:init_schema, config)
+        if options.include?(:d)
+          Squasher.tell(:dry_mode_finished)
+          puts Render.render(:init_schema, config)
+        else
+          path = config.migration_file(finish_timestamp, :init_schema)
+          File.open(path, 'wb') { |io| io << Render.render(:init_schema, config) }
+          migrations.each { |file| FileUtils.rm(file) }
         end
-
-        migrations.each { |file| FileUtils.rm(file) }
 
         Squasher.rake("db:drop") unless Squasher.ask(:keep_database)
       end
+
       Squasher.clean if result && Squasher.ask(:apply_clean)
     end
 
@@ -64,10 +71,17 @@ module Squasher
 
     def under_squash_env
       config.stub_dbconfig do
-        if Squasher.rake("db:drop db:create", :db_create) &&
-          Squasher.rake("db:migrate VERSION=#{ finish_timestamp }", :db_migrate)
-          yield
+        if options.include?(:r)
+          Squasher.tell(:db_reuse)
+        else
+          return unless Squasher.rake("db:drop db:create", :db_create)
         end
+
+        return unless Squasher.rake("db:migrate VERSION=#{ finish_timestamp }", :db_migrate)
+
+        yield
+
+        true
       end
     end
   end

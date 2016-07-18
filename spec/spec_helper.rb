@@ -1,13 +1,22 @@
 require 'bundler/setup'
 Bundler.require
 
-def fake_root
-  @fake_root ||= File.join(File.dirname(__FILE__), 'fake_app')
+
+module SpecHelpers
+  def fake_root
+    File.join(File.dirname(__FILE__), 'fake_app')
+  end
+end
+
+module Squasher
+  class Dir < ::Dir
+    def self.pwd
+      File.join(File.dirname(__FILE__), 'fake_app')
+    end
+  end
 end
 
 RSpec.configure do |config|
   config.order = 'random'
-  config.before do
-    Squasher::Config.any_instance.stub(:root_path => fake_root)
-  end
+  config.include SpecHelpers
 end

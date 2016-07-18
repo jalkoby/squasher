@@ -4,12 +4,14 @@ require 'erb'
 
 module Squasher
   class Config
-    def initialize
-      @root_path = Dir.pwd
-    end
+    attr_reader :schema_file
 
-    def schema_file
-      @schema_file ||= from_root('db', 'schema.rb')
+    def initialize
+      root_path = Dir.pwd
+
+      @schema_file = File.join(root_path, 'db', 'schema.rb')
+      @migrations_folder = File.join(root_path, 'db', 'migrate')
+      @dbconfig_file = File.join(root_path, 'config', 'database.yml')
     end
 
     def migration_files
@@ -34,34 +36,23 @@ module Squasher
       list = [dbconfig_file, schema_file]
       list.each do |file|
         next unless File.exists?(file)
-        FileUtils.mv file, "#{ file }.sbackup"
+        FileUtils.mv file, "#{ file }.sq"
       end
-      update_dbconfig_file
+
+      File.open(dbconfig_file, 'wb') { |stream| stream.write dbconfig.to_yaml }
 
       yield
 
     ensure
       list.each do |file|
-        next unless File.exists?("#{ file }.sbackup")
-        FileUtils.mv "#{ file }.sbackup", file
+        next unless File.exists?("#{ file }.sq")
+        FileUtils.mv "#{ file }.sq", file
       end
     end
 
     private
 
-    attr_reader :root_path
-
-    def from_root(*subfolders)
-      File.join(root_path, *subfolders)
-    end
-
-    def migrations_folder
-      @migrations_folder ||= from_root('db', 'migrate')
-    end
-
-    def dbconfig_file
-      @dbconfig_file ||= from_root('config', 'database.yml')
-    end
+    attr_reader :migrations_folder, :dbconfig_file
 
     def dbconfig
       return @dbconfig if defined?(@dbconfig)
@@ -76,10 +67,6 @@ module Squasher
         @dbconfig = nil
       end
       @dbconfig
-    end
-
-    def update_dbconfig_file
-      File.open(dbconfig_file, 'wb') { |stream| stream.write dbconfig.to_yaml }
     end
   end
 end

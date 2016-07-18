@@ -3,6 +3,7 @@
 /.bundle
 /.config
 /.rspec
+Gemfile.custom
 Gemfile.lock
 InstalledFiles
 _yardoc
