@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "squasher"
-  spec.version       = "0.1.7"
+  spec.version       = "0.2.0"
   spec.authors       = ["Sergey Pchelintsev"]
   spec.email         = ["mail@sergeyp.me"]
   spec.description   = %q{Squash your old migrations}
