@@ -12,9 +12,11 @@ You should not add this to your Gemfile. Just standalone installation:
 
     $ gem install squasher
 
-@Note if you use Rbenv don't forget to run `rbenv rehash`.
+**@note** if you use Rbenv don't forget to run `rbenv rehash`.
 
 ## Usage
+
+**@note** stop all preloading systems if there are present (spring, zeus, etc)
 
 Suppose your application was created a few years ago. `%app_root%/db/migrate` folder looks like this:
 ```bash
