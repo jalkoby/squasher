@@ -1,6 +1,6 @@
 # Squasher
 
-[![Build Status](https://travis-ci.org/jalkoby/squasher.png?branch=master)](https://travis-ci.org/jalkoby/squasher)
+[![Build Status](https://travis-ci.org/jalkoby/squasher.svg?branch=master)](https://travis-ci.org/jalkoby/squasher)
 [![Code Climate](https://codeclimate.com/github/jalkoby/squasher.svg)](https://codeclimate.com/github/jalkoby/squasher)
 [![Gem Version](https://badge.fury.io/rb/squasher.svg)](http://badge.fury.io/rb/squasher)
 
