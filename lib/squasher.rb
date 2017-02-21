@@ -27,7 +27,7 @@ module Squasher
 
   def rake(command, description = nil)
     tell(description) if description
-    system("bundle exec rake #{ command }")
+    system("RAILS_ENV=development DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rake #{ command }")
   end
 
   def ask(*args)

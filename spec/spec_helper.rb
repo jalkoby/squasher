@@ -1,7 +1,6 @@
 require 'bundler/setup'
 Bundler.require
 
-
 module SpecHelpers
   def fake_root
     File.join(File.dirname(__FILE__), 'fake_app')

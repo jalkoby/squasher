@@ -52,7 +52,7 @@ squasher will not need to create the db schema and all data from the previous mi
 
 ## Requirements
 
-It works and was tested on Ruby 2.0+ and Rails 3.1+. It also requires a valid configuration in `config/database.yml` and using Ruby format in `db/schema.rb` (default Rails use-case).
+It works and was tested on Ruby 2.0+ and Rails 3.1+. It also requires a valid development configuration in `config/database.yml` and using Ruby format in `db/schema.rb` (default Rails use-case).
 If an old migration inserted data (created ActiveRecord model records) you will lose this code in the squashed migration, **BUT** `squasher` will ask you to leave a tmp database which will have all data that was inserted while migrating. Using this database you could add that data as another migration, or into `config/seed.rb` (the expected place for this stuff).
 
 ## Changelog
