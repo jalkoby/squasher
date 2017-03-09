@@ -22,10 +22,9 @@ module Squasher
         inside_schema = false
         stream.each_line do |line|
           if inside_schema
-            next if line.empty?
-            # reach eand of schema
+            # reach the end of schema
             break if line.index("end") == 0
-            yield line[2...-1]
+            yield line[2...-1].to_s
           else
             inside_schema = true if line.include?("ActiveRecord::Schema")
           end

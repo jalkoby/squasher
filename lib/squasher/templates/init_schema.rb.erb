@@ -1,8 +1,8 @@
 class InitSchema < ActiveRecord::Migration
   def up
-    <%- each_schema_line do |line| -%>
-    <%= line %>
-    <%- end -%>
+<%- each_schema_line do |line| -%>
+<%= line.strip.empty? ? '' : "    #{line}" %>
+<%- end -%>
   end
 
   def down
