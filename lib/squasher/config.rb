@@ -7,11 +7,11 @@ module Squasher
     attr_reader :schema_file
 
     def initialize
-      root_path = Dir.pwd
+      app_path = Squasher.app_path || Dir.pwd
 
-      @schema_file = File.join(root_path, 'db', 'schema.rb')
-      @migrations_folder = File.join(root_path, 'db', 'migrate')
-      @dbconfig_file = File.join(root_path, 'config', 'database.yml')
+      @schema_file = File.join(app_path, 'db', 'schema.rb')
+      @migrations_folder = File.join(Squasher.root_path || app_path, 'db', 'migrate')
+      @dbconfig_file = File.join(app_path, 'config', 'database.yml')
     end
 
     def migration_files

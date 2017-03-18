@@ -2,7 +2,7 @@ require 'fileutils'
 
 module Squasher
   class Worker
-    OPTIONS = [:d, :r]
+    OPTIONS = [:d, :r, :e]
 
     attr_reader :date, :options
 
@@ -50,9 +50,7 @@ module Squasher
     end
 
     def migrations
-      return @migrations if @migrations
-
-      @migrations = config.migration_files.select { |file| before_date?(get_timestamp(file)) }.sort
+      @migrations ||= config.migration_files.select { |file| before_date?(get_timestamp(file)) }.sort
     end
 
     def get_timestamp(file)
