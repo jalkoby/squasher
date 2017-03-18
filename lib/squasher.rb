@@ -6,6 +6,8 @@ module Squasher
   autoload :Render,  'squasher/render'
   autoload :Worker,  'squasher/worker'
 
+  attr_reader :app_path, :root_path
+
   def squash(raw_date, raw_options)
     parts = raw_date.to_s.split('/').map(&:to_i)
     date = Time.new(*parts)
@@ -18,6 +20,12 @@ module Squasher
       end
       o
     end
+
+    @app_path = @root_path = Dir.pwd
+    # In most rails engines, the 'true' root
+    # is above the dummy/test directory
+    @root_path = resolve_root(@app_path) if options.delete(:e)
+
     Worker.process(date, options)
   end
 
@@ -27,7 +35,9 @@ module Squasher
 
   def rake(command, description = nil)
     tell(description) if description
-    system("RAILS_ENV=development DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rake #{ command }")
+    Dir.chdir(root_path) do
+      system("RAILS_ENV=development DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rake #{ command }")
+    end
   end
 
   def ask(*args)
@@ -61,5 +71,19 @@ module Squasher
 
   def colorize(message)
     message.gsub(/\:(\w+)\<([^>]+)\>/) { |_| "\033[#{ COLORS[$1] }m#{ $2 }\033[039m" }
+  end
+
+  # Upwardly traverse directories
+  # until we find the real app root
+  # if the user has specified they're
+  # in an engine's dummy root
+  def resolve_root(path)
+    root = Pathname.new(path).parent.to_s
+    root = Pathname.new(root).parent.to_s until app_path?(root)
+    root
+  end
+
+  def app_path?(path)
+    Dir.glob(File.join(path, '*')).select { |file| file =~ /db|config$/ }.size == 2
   end
 end
