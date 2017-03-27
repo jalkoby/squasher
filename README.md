@@ -50,7 +50,7 @@ process breaks in a migration from 2014. In this situation you squash till 2014,
 database at the end, make a patch in the broken migration and run again the suite with `-r` option. As the result
 squasher will not need to create the db schema and all data from the previous migrations will be there.
 
-`-e` - tell squasher that you are squashing a Rails engine. You must execute squasher from within the engine's dummy app (ex., `[root]/spec/dummy`) otherwise it will fail. This option is necessary, otherwise squasher will fail to discover schema.rb and database.yml as these are not part of an engine, but of a regular Rails application.
+`-e` - tell squasher that you are squashing a Rails engine. To squash migrations you need to configure a dummy app. If your dummy app located outside the engine's folder provide path to it as the next argument `squasher -e ../my-engine-app 2016`
 
 ## Requirements
 
@@ -58,8 +58,10 @@ It works and was tested on Ruby 2.0+ and Rails 3.1+. It also requires a valid de
 If an old migration inserted data (created ActiveRecord model records) you will lose this code in the squashed migration, **BUT** `squasher` will ask you to leave a tmp database which will have all data that was inserted while migrating. Using this database you could add that data as another migration, or into `config/seed.rb` (the expected place for this stuff).
 
 ## Changelog
-- 0.2.3
-  - support rails engines
+- 0.3.0
+  - **rails engines support** ([@JakeTheSnake3p0](https://github.com/JakeTheSnake3p0))
+  - move messages from JSON file to YAML
+  - allow to use a db config with a "soft" parsing errors
 - 0.2.2
   - strip white spaces in init migrations
 - 0.2.1
