@@ -4,14 +4,65 @@ require 'erb'
 
 module Squasher
   class Config
+    OPTIONS = [:d, :r, :e].freeze
+
+    module Render
+      extend self
+
+      def process(path)
+        @error = false
+
+        str = YAML.load(ERB.new(File.read(path)).result(binding))
+        [str, @error]
+      end
+
+      def method_missing(*args)
+        @error = true
+        self
+      end
+
+      def const_missing(*args)
+        @error = true
+        self
+      end
+
+      def to_s
+        ''
+      end
+
+      def inspect
+        ''
+      end
+    end
+
     attr_reader :schema_file
 
     def initialize
-      app_path = Squasher.app_path || Dir.pwd
+      @root_path = Dir.pwd.freeze
+      @migrations_folder = File.join(@root_path, 'db', 'migrate')
+      @flags = []
+      set_app_path(@root_path)
+    end
 
-      @schema_file = File.join(app_path, 'db', 'schema.rb')
-      @migrations_folder = File.join(Squasher.root_path || app_path, 'db', 'migrate')
-      @dbconfig_file = File.join(app_path, 'config', 'database.yml')
+    def set(key, value)
+      if key == :e
+        base = value.nil? ? @root_path : File.expand_path(value, @root_path)
+        list = Dir.glob(File.join(base, '**', '*', 'config', 'application.rb'))
+        case list.size
+        when 1
+          set_app_path(File.expand_path('../..', list.first))
+        when 0
+          Squasher.error(:cannot_find_dummy, base: base)
+        else
+          Squasher.error(:multi_dummy_case, base: base)
+        end
+      else
+        @flags << key
+      end
+    end
+
+    def with?(k)
+      @flags.include?(k)
     end
 
     def migration_files
@@ -50,6 +101,10 @@ module Squasher
       end
     end
 
+    def in_app_root(&block)
+      Dir.chdir(@app_path, &block)
+    end
+
     private
 
     attr_reader :migrations_folder, :dbconfig_file
@@ -61,13 +116,23 @@ module Squasher
       @dbconfig = nil
 
       begin
-        content = YAML.load(ERB.new(File.read(dbconfig_file)).result(binding))
+        content, soft_error = Render.process(dbconfig_file)
         if content.has_key?('development')
           @dbconfig = { 'development' => content['development'].merge('database' => 'squasher') }
         end
       rescue
       end
+
+      if soft_error && @dbconfig
+        exit unless Squasher.ask(:use_dbconfig, config: @dbconfig.fetch('development'))
+      end
       @dbconfig
+    end
+
+    def set_app_path(path)
+      @app_path = path
+      @schema_file = File.join(path, 'db', 'schema.rb')
+      @dbconfig_file = File.join(path, 'config', 'database.yml')
     end
   end
 end

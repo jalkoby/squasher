@@ -1,6 +1,3 @@
-require 'bundler/setup'
-Bundler.require
-
 module SpecHelpers
   def fake_root
     File.join(File.dirname(__FILE__), 'fake_app')
@@ -14,6 +11,9 @@ module Squasher
     end
   end
 end
+
+require 'bundler/setup'
+Bundler.require
 
 RSpec.configure do |config|
   config.order = 'random'

@@ -25,7 +25,7 @@ module Squasher
     private
 
     def config
-      @config ||= Squasher::Config.new
+      Squasher.config
     end
 
     def prev_migration

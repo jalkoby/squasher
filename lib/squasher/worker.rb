@@ -2,24 +2,21 @@ require 'fileutils'
 
 module Squasher
   class Worker
-    OPTIONS = [:d, :r, :e]
-
-    attr_reader :date, :options
+    attr_reader :date
 
     def self.process(*args)
       new(*args).process
     end
 
-    def initialize(date, options = [])
+    def initialize(date)
       @date = date
-      @options = options
     end
 
     def process
       check!
 
       result = under_squash_env do
-        if options.include?(:d)
+        if Squasher.config.with?(:d)
           Squasher.tell(:dry_mode_finished)
           puts Render.render(:init_schema, config)
         else
@@ -37,7 +34,7 @@ module Squasher
     private
 
     def config
-      @config ||= ::Squasher::Config.new
+      Squasher.config
     end
 
     def check!
@@ -69,7 +66,7 @@ module Squasher
 
     def under_squash_env
       config.stub_dbconfig do
-        if options.include?(:r)
+        if Squasher.config.with?(:r)
           Squasher.tell(:db_reuse)
         else
           return unless Squasher.rake("db:drop db:create", :db_create)
