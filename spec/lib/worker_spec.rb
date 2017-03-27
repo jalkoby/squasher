@@ -50,21 +50,29 @@ describe Squasher::Worker do
     end
   end
 
-  specify 'the dry mode' do
-    worker = described_class.new(Time.new(2014), [:d])
-    allow(worker).to receive(:under_squash_env).and_yield.and_return(true)
-    expect(Squasher).to receive(:tell).with(:dry_mode_finished).and_call_original
-    expect(Squasher).to receive(:ask).with(:keep_database).and_return(false)
-    expect(Squasher).to receive(:rake).with("db:drop")
-    expect(Squasher).to receive(:ask).with(:apply_clean).and_return(false)
-    worker.process
-  end
+  context 'with flags' do
+    before do
+      Squasher.instance_variable_set(:@config, Squasher::Config.new)
+    end
 
-  specify 'reuse of an existing database' do
-    worker = described_class.new(Time.new(2014), [:r])
-    expect(Squasher).to receive(:tell).with(:db_reuse).and_call_original
-    expect(Squasher).not_to receive(:rake).with("db:drop db:create", :db_create)
-    allow(Squasher).to receive(:rake).with("db:migrate VERSION=20131213090719", :db_migrate).and_return(false)
-    worker.process
+    specify 'the dry mode' do
+      Squasher.config.set(:d, nil)
+      worker = described_class.new(Time.new(2014))
+      allow(worker).to receive(:under_squash_env).and_yield.and_return(true)
+      expect(Squasher).to receive(:tell).with(:dry_mode_finished).and_call_original
+      expect(Squasher).to receive(:ask).with(:keep_database).and_return(false)
+      expect(Squasher).to receive(:rake).with("db:drop")
+      expect(Squasher).to receive(:ask).with(:apply_clean).and_return(false)
+      worker.process
+    end
+
+    specify 'reuse of an existing database' do
+      Squasher.config.set(:r, nil)
+      worker = described_class.new(Time.new(2014))
+      expect(Squasher).to receive(:tell).with(:db_reuse).and_call_original
+      expect(Squasher).not_to receive(:rake).with("db:drop db:create", :db_create)
+      allow(Squasher).to receive(:rake).with("db:migrate VERSION=20131213090719", :db_migrate).and_return(false)
+      worker.process
+    end
   end
 end

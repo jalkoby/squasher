@@ -3,6 +3,7 @@
 /.bundle
 /.config
 /.rspec
+/dummy
 Gemfile.custom
 Gemfile.lock
 InstalledFiles
