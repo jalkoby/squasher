@@ -8,11 +8,28 @@ Squasher compresses old migrations in a Rails application. If you work on a big 
 
 ## Installation
 
-You should not add this to your Gemfile. Just standalone installation:
+You don't have to add it into your Gemfile. Just a standalone installation:
 
     $ gem install squasher
 
 **@note** if you use Rbenv don't forget to run `rbenv rehash`.
+
+If you want to share it with your rails/sinatra/etc app add the below:
+
+```ruby
+# at the bottom of a Gemfile where capistrano, rubocop and other utils should be!
+group :tools do
+  gem 'squasher', '>= 0.3.0'
+end
+```
+
+Don't forget to run `bundle`. 
+
+To integrate `squasher` with your app even more do the below:
+
+    $ bundle binstub squasher
+    $ # and you have a runner inside the `bin` folder
+    $ bin/squasher
 
 ## Usage
 
