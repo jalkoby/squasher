@@ -17,9 +17,11 @@ You don't have to add it into your Gemfile. Just a standalone installation:
 If you want to share it with your rails/sinatra/etc app add the below:
 
 ```ruby
-# at the bottom of a Gemfile where capistrano, rubocop and other utils should be!
+# Yep, the missing group in most Gemfiles where all utilities should be!
 group :tools do
-  gem 'squasher', '>= 0.3.0'
+  gem 'squasher', '>= 0.3.0'  
+  gem 'capistrano'
+  gem 'rubocop'
 end
 ```
 
