@@ -24,7 +24,7 @@ module Squasher
           if inside_schema
             # reach the end of schema
             break if line.index("end") == 0
-            yield line[2...-1].to_s
+            yield line.gsub(/\A\s{,2}(.*)\s+\z/, '\1')
           else
             inside_schema = true if line.include?("ActiveRecord::Schema")
           end
