@@ -1,13 +1,13 @@
-# coding: utf-8
+# encoding: utf-8
 
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "squasher"
-  spec.version       = "0.3.1"
+  spec.version       = "0.4.0"
   spec.authors       = ["Sergey Pchelintsev"]
-  spec.email         = ["mail@sergeyp.me"]
+  spec.email         = ["linz.sergey@gmail.com"]
   spec.description   = %q{Squash your old migrations}
   spec.summary       = %q{Squash your old migrations}
   spec.homepage      = "https://github.com/jalkoby/squasher"

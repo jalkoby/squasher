@@ -71,12 +71,16 @@ squasher will not need to create the db schema and all data from the previous mi
 
 `-e` - tell squasher that you are squashing a Rails engine. To squash migrations you need to configure a dummy app. If your dummy app located outside the engine's folder provide path to it as the next argument `squasher -e ../my-engine-app 2016`
 
+`-m` - for correct work with Rails 5 specify a migration version like `squasher -m 5.0 ...`
+
 ## Requirements
 
 It works and was tested on Ruby 2.0+ and Rails 3.1+. It also requires a valid development configuration in `config/database.yml` and using Ruby format in `db/schema.rb` (default Rails use-case).
 If an old migration inserted data (created ActiveRecord model records) you will lose this code in the squashed migration, **BUT** `squasher` will ask you to leave a tmp database which will have all data that was inserted while migrating. Using this database you could add that data as another migration, or into `config/seed.rb` (the expected place for this stuff).
 
 ## Changelog
+- 0.4.0
+  - Support rails versioned migrations which were introduced in Rails 5
 - 0.3.1
   - fix init migration generation
 - 0.3.0
