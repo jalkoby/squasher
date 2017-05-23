@@ -4,7 +4,7 @@ require 'erb'
 
 module Squasher
   class Config
-    OPTIONS = [:d, :r, :e].freeze
+    OPTIONS = [:d, :r, :e, :m].freeze
 
     module Render
       extend self
@@ -35,7 +35,7 @@ module Squasher
       end
     end
 
-    attr_reader :schema_file
+    attr_reader :schema_file, :migration_version
 
     def initialize
       @root_path = Dir.pwd.freeze
@@ -56,6 +56,9 @@ module Squasher
         else
           Squasher.error(:multi_dummy_case, base: base)
         end
+      elsif key == :m
+        Squasher.error(:invalid_migration_version, value: value) unless value.to_s =~ /\A\d.\d\z/
+        @migration_version = "[#{value}]"
       else
         @flags << key
       end

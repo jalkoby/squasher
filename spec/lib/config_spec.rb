@@ -55,4 +55,11 @@ describe Squasher::Config do
   end
 
   specify { expect(config.migration_file(1230, :sample)).to eq(File.join(fake_root, 'db', 'migrate', '1230_sample.rb')) }
+
+  specify "generate versioned migrations" do
+    config = Squasher::Config.new
+    config.set(:m, '5.1')
+    content = Squasher::Render.render(:init_schema, config)
+    expect(content).to include('ActiveRecord::Migration[5.1]')
+  end
 end
