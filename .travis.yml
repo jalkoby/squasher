@@ -8,3 +8,5 @@ rvm:
   - 2.2
   - 2.1
   - 2.0
+notifications:
+  email: false
