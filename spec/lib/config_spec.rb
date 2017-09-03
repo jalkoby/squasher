@@ -58,7 +58,7 @@ describe Squasher::Config do
 
   specify "generate versioned migrations" do
     config = Squasher::Config.new
-    config.set(:m, '5.1')
+    config.set(:migration, '5.1')
     content = Squasher::Render.render(:init_schema, config)
     expect(content).to include('ActiveRecord::Migration[5.1]')
   end

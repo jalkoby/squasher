@@ -4,8 +4,6 @@ require 'erb'
 
 module Squasher
   class Config
-    OPTIONS = [:d, :r, :e, :m].freeze
-
     module Render
       extend self
 
@@ -45,7 +43,7 @@ module Squasher
     end
 
     def set(key, value)
-      if key == :e
+      if key == :engine
         base = value.nil? ? @root_path : File.expand_path(value, @root_path)
         list = Dir.glob(File.join(base, '**', '*', 'config', 'application.rb'))
         case list.size
@@ -56,7 +54,7 @@ module Squasher
         else
           Squasher.error(:multi_dummy_case, base: base)
         end
-      elsif key == :m
+      elsif key == :migration
         Squasher.error(:invalid_migration_version, value: value) unless value.to_s =~ /\A\d.\d\z/
         @migration_version = "[#{value}]"
       else
@@ -64,7 +62,7 @@ module Squasher
       end
     end
 
-    def with?(k)
+    def set?(k)
       @flags.include?(k)
     end
 

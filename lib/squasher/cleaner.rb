@@ -13,11 +13,10 @@ module Squasher
 
       migration_file = config.migration_file(now_timestamp, MIGRATION_NAME)
       if prev_migration
-        FileUtils.mv(prev_migration, migration_file)
-      else
-        File.open(migration_file, 'wb') do |stream|
-          stream << ::Squasher::Render.render(MIGRATION_NAME, config)
-        end
+        FileUtils.rm(prev_migration)
+      end
+      File.open(migration_file, 'wb') do |stream|
+        stream << ::Squasher::Render.render(MIGRATION_NAME, config)
       end
       Squasher.rake("db:migrate", :db_cleaning)
     end

@@ -4,6 +4,7 @@ module Squasher
   autoload :Cleaner, 'squasher/cleaner'
   autoload :Config,  'squasher/config'
   autoload :Render,  'squasher/render'
+  autoload :VERSION, 'squasher/version'
   autoload :Worker,  'squasher/worker'
 
   attr_reader :config
@@ -13,28 +14,12 @@ module Squasher
   def squash(raw_date, options)
     parts = raw_date.to_s.split('/').map(&:to_i)
     date = Time.new(*parts)
-
-    options.reduce([]) do |acc, arg|
-      if arg.index('-') == 0
-        arg = arg.gsub('-', '').to_sym
-        unless Config::OPTIONS.include?(arg)
-          tell(:wrong_option, arg: arg)
-          error(:usage)
-        end
-        acc.push([arg])
-      elsif acc.empty?
-        tell(:invalid_param, arg: arg)
-        error(:usage)
-      else
-        acc.last[1] = arg
-      end
-      acc
-    end.each { |(k, v)| config.set(k, v) }
-
+    options.each { |(k, v)| config.set(k, v) }
     Worker.process(date)
   end
 
-  def clean
+  def clean(options)
+    options.each { |(k, v)| config.set(k, v) }
     Cleaner.process
   end
 

@@ -15,7 +15,9 @@ db_migrate: Squasher is applying migrations on a tmp database
 db_cleaning: Squasher is applying the clean migration
 db_reuse: Squasher is reusing the database from the previous squashing
 usage:
-- "Example usage:"
+- "Squasher %{version}"
+- ""
+- "Examples of usage:"
 - "  :green<squasher> [options] :yellow<year[/month][/day]> => squash migrations prior to a specified date"
 - "  :green<squasher> :yellow<clean>                        => generate or update a cleaning migration and apply it"
 - "  :green<squasher> :yellow<info>                         => show the message\n"

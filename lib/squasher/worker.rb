@@ -16,7 +16,7 @@ module Squasher
       check!
 
       result = under_squash_env do
-        if Squasher.config.with?(:d)
+        if Squasher.config.set?(:dry)
           Squasher.tell(:dry_mode_finished)
           puts Render.render(:init_schema, config)
         else
@@ -66,7 +66,7 @@ module Squasher
 
     def under_squash_env
       config.stub_dbconfig do
-        if Squasher.config.with?(:r)
+        if Squasher.config.set?(:reuse)
           Squasher.tell(:db_reuse)
         else
           return unless Squasher.rake("db:drop db:create", :db_create)

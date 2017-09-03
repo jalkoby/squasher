@@ -56,7 +56,7 @@ describe Squasher::Worker do
     end
 
     specify 'the dry mode' do
-      Squasher.config.set(:d, nil)
+      Squasher.config.set(:dry, nil)
       worker = described_class.new(Time.new(2014))
       allow(worker).to receive(:under_squash_env).and_yield.and_return(true)
       expect(Squasher).to receive(:tell).with(:dry_mode_finished).and_call_original
@@ -67,7 +67,7 @@ describe Squasher::Worker do
     end
 
     specify 'reuse of an existing database' do
-      Squasher.config.set(:r, nil)
+      Squasher.config.set(:reuse, nil)
       worker = described_class.new(Time.new(2014))
       expect(Squasher).to receive(:tell).with(:db_reuse).and_call_original
       expect(Squasher).not_to receive(:rake).with("db:drop db:create", :db_create)

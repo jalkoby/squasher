@@ -1,10 +1,34 @@
 #!/usr/bin/env ruby
+lib = File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'optparse'
 require 'squasher'
 
-if ARGV[0] == 'clean'
-  Squasher.clean
-elsif ARGV[-1] =~ /\A\d{4}/
-  Squasher.squash(ARGV[-1], ARGV[0...-1])
+options = {}
+parser = OptionParser.new do |config|
+  config.on('-v', '--version', '-h', '--help')
+
+  config.on('-d', '--dry') do
+    options[:dry] = true
+  end
+
+  config.on('-r', '--reuse') do
+    options[:reuse] = true
+  end
+
+  config.on('-e', '--engine=PATH') do |value|
+    options[:engine] = value
+  end
+
+  config.on('-m', '--migration', '=VERSION') do |value|
+    options[:migration] = value
+  end
+end
+parser.parse!
+
+case ARGV.first
+when /\A\d{4}/ then Squasher.squash(ARGV.first, options)
+when 'clean' then Squasher.clean(options)
 else
-  Squasher.tell(:usage)
+  Squasher.tell(:usage, version: Squasher::VERSION)
 end

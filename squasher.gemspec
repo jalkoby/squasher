@@ -1,11 +1,11 @@
 # encoding: utf-8
-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'squasher/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "squasher"
-  spec.version       = "0.4.0"
+  spec.version       = Squasher::VERSION
   spec.authors       = ["Sergey Pchelintsev"]
   spec.email         = ["linz.sergey@gmail.com"]
   spec.description   = %q{Squash your old migrations}
