@@ -15,7 +15,7 @@ describe Squasher::Cleaner do
 
   it 'create a new migration' do
     allow_any_instance_of(Squasher::Cleaner).to receive(:prev_migration).and_return(nil)
-    Squasher.clean({})
+    Squasher.clean
 
     expect(clean_migrations).to include(expected_file)
     File.open(expected_file) do |stream|
@@ -25,7 +25,7 @@ describe Squasher::Cleaner do
   end
 
   it 'update an existing migration' do
-    Squasher.clean({})
+    Squasher.clean
 
     expect(clean_migrations.size).to be(1)
     expect(clean_migrations.first).to eq(expected_file)

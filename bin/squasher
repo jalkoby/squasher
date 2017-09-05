@@ -16,7 +16,11 @@ parser = OptionParser.new do |config|
     options[:reuse] = true
   end
 
-  config.on('-e', '--engine=PATH') do |value|
+  config.on('-e') do
+    options[:engine] = nil
+  end
+
+  config.on('--engine=PATH') do |value|
     options[:engine] = value
   end
 
@@ -26,9 +30,10 @@ parser = OptionParser.new do |config|
 end
 parser.parse!
 
+Squasher.setup(options)
 case ARGV.first
-when /\A\d{4}/ then Squasher.squash(ARGV.first, options)
-when 'clean' then Squasher.clean(options)
+when /\A\d{4}/ then Squasher.squash(ARGV.first)
+when 'clean' then Squasher.clean
 else
   Squasher.tell(:usage, version: Squasher::VERSION)
 end

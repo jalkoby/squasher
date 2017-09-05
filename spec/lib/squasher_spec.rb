@@ -7,7 +7,7 @@ describe Squasher do
 
     def expected_covert(input, expected)
       expect(Squasher::Worker).to receive(:process).with(expected)
-      Squasher.squash(input, [])
+      Squasher.squash(input)
     end
   end
 

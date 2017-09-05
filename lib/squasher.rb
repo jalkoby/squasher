@@ -11,15 +11,17 @@ module Squasher
 
   @config = Config.new
 
-  def squash(raw_date, options)
+  def setup(options)
+    options.each { |(k, v)| config.set(k, v) }
+  end
+
+  def squash(raw_date)
     parts = raw_date.to_s.split('/').map(&:to_i)
     date = Time.new(*parts)
-    options.each { |(k, v)| config.set(k, v) }
     Worker.process(date)
   end
 
-  def clean(options)
-    options.each { |(k, v)| config.set(k, v) }
+  def clean
     Cleaner.process
   end
 
