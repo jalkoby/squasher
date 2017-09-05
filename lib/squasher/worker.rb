@@ -28,7 +28,7 @@ module Squasher
         Squasher.rake("db:drop") unless Squasher.ask(:keep_database)
       end
 
-      Squasher.clean if result && Squasher.ask(:apply_clean)
+      Squasher.clean({}) if result && Squasher.ask(:apply_clean)
     end
 
     private
