@@ -10,6 +10,9 @@ module Squasher
       File.join(File.dirname(__FILE__), 'fake_app')
     end
   end
+
+  def puts(*)
+  end
 end
 
 require 'bundler/setup'

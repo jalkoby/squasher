@@ -40,6 +40,10 @@ module Squasher
     message = messages.fetch(key.to_s)
     message = message.join("\n") if message.is_a?(Array)
     message = colorize(message)
+    print(message, options)
+  end
+
+  def print(message, options = {})
     puts message % options
   end
 

@@ -18,7 +18,7 @@ module Squasher
       result = under_squash_env do
         if Squasher.config.set?(:dry)
           Squasher.tell(:dry_mode_finished)
-          puts Render.render(:init_schema, config)
+          Squasher.print(Render.render(:init_schema, config))
         else
           path = config.migration_file(finish_timestamp, :init_schema)
           File.open(path, 'wb') { |io| io << Render.render(:init_schema, config) }

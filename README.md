@@ -79,6 +79,8 @@ It works and was tested on Ruby 2.0+ and Rails 3.1+. It also requires a valid de
 If an old migration inserted data (created ActiveRecord model records) you will lose this code in the squashed migration, **BUT** `squasher` will ask you to leave a tmp database which will have all data that was inserted while migrating. Using this database you could add that data as another migration, or into `config/seed.rb` (the expected place for this stuff).
 
 ## Changelog
+- 0.5.1
+  - Fix work on Windows machines ([@tobmatth](https://github.com/tobmatth))
 - 0.5.0
   - Rework command line integration. Fix clean process with Rails 5
 - 0.4.0
