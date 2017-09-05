@@ -26,7 +26,7 @@ module Squasher
   def rake(command, description = nil)
     tell(description) if description
     config.in_app_root do
-      env = { 'RAILS_ENV' => 'development', 'DISABLE_DATABASE_ENVIRONMENT_CHECK' => 1 }
+      env = { 'RAILS_ENV' => 'development', 'DISABLE_DATABASE_ENVIRONMENT_CHECK' => '1' }
       system(env, "bundle exec rake #{ command }")
     end
   end

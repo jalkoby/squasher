@@ -42,7 +42,7 @@ describe Squasher do
 
     it 'disables database environment check' do
       expect_any_instance_of(Object).to receive(:system)
-        .with(hash_including('DISABLE_DATABASE_ENVIRONMENT_CHECK' => 1), /db:migrate/)
+        .with(hash_including('DISABLE_DATABASE_ENVIRONMENT_CHECK' => '1'), /db:migrate/)
       Squasher.rake('db:migrate')
     end
   end
