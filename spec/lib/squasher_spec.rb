@@ -30,7 +30,19 @@ describe Squasher do
     end
 
     it 'runs a given command' do
-      expect_any_instance_of(Object).to receive(:system).with(/db:migrate/)
+      expect_any_instance_of(Object).to receive(:system).with(anything, /db:migrate/)
+      Squasher.rake('db:migrate')
+    end
+
+    it 'sets the Rails environment to development' do
+      expect_any_instance_of(Object).to receive(:system)
+        .with(hash_including('RAILS_ENV' => 'development'), /db:migrate/)
+      Squasher.rake('db:migrate')
+    end
+
+    it 'disables database environment check' do
+      expect_any_instance_of(Object).to receive(:system)
+        .with(hash_including('DISABLE_DATABASE_ENVIRONMENT_CHECK' => 1), /db:migrate/)
       Squasher.rake('db:migrate')
     end
   end
