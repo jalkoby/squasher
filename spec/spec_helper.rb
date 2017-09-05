@@ -21,4 +21,8 @@ Bundler.require
 RSpec.configure do |config|
   config.order = 'random'
   config.include SpecHelpers
+
+  config.mock_with :rspec do |mocks|
+    mocks.verify_partial_doubles = true
+  end
 end
