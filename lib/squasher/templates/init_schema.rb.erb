@@ -1,7 +1,8 @@
 class InitSchema < ActiveRecord::Migration<%= @config.migration_version %>
   def up
 <%- each_schema_line do |line| -%>
-<%= line.strip.empty? ? '' : "    #{line}" %>
+<%- next if line.strip.empty?  -%>
+<%= "    #{line}" %>
 <%- end -%>
   end
 
