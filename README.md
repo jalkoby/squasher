@@ -74,7 +74,7 @@ If an old migration inserted data (created ActiveRecord model records) you will 
 
 ## Changelog
 
-All changes are located in (the changelog file)[CHANGELOG.md] with contribution notes
+All changes are located in [the changelog file](CHANGELOG.md) with contribution notes
 
 ## Contributing
 
