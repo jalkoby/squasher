@@ -31,13 +31,13 @@ module Squasher
 
     def stream_structure(stream)
       yield 'execute <<-SQL'
-      insert_migration = false
+      skip_mode = false
       ignored_table = ['ar_internal_metadata', 'schema_migrations']
       stream.each_line do |line|
-        insert_migration = true if ignored_table.any? { |t| line.include?(t) }
+        skip_mode = true if ignored_table.any? { |t| line.include?(t) }
 
-        if insert_migration
-          insert_migration = false if line.include?(';')
+        if skip_mode
+          skip_mode = false if line.include?(';')
           next
         end
 
