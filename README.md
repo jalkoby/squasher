@@ -19,7 +19,7 @@ If you want to share it with your rails/sinatra/etc app add the below:
 ```ruby
 # Yep, the missing group in most Gemfiles where all utilities should be!
 group :tools do
-  gem 'squasher', '>= 0.3.0'
+  gem 'squasher', '>= 0.6.0'
   gem 'capistrano'
   gem 'rubocop'
 end
@@ -72,7 +72,9 @@ Run `squasher -h` or just `squasher` to see how you can use squasher:
 It works and was tested on Ruby 2.0+ and Rails 3.1+. It also requires a valid development configuration in `config/database.yml`.
 If an old migration inserted data (created ActiveRecord model records) you will lose this code in the squashed migration, **BUT** `squasher` will ask you to leave a tmp database which will have all data that was inserted while migrating. Using this database you could add that data as another migration, or into `config/seed.rb` (the expected place for this stuff).
 
-## (Changelog)[CHANGELOG.md]
+## Changelog
+
+All changes are located in (the changelog file)[CHANGELOG.md] with contribution notes
 
 ## Contributing
 
