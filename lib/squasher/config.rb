@@ -57,6 +57,9 @@ module Squasher
       elsif key == :migration
         Squasher.error(:invalid_migration_version, value: value) unless value.to_s =~ /\A\d.\d\z/
         @migration_version = "[#{value}]"
+      elsif key == :structure
+        @schema_file = File.join(@app_path, 'db', 'structure.sql')
+        @flags << key
       else
         @flags << key
       end
