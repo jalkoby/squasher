@@ -19,7 +19,7 @@ module Squasher
 
     def each_schema_line(&block)
       File.open(config.schema_file, 'r') do |stream|
-        if @config.set?(:structure)
+        if @config.set?(:sql)
           stream_structure(stream, &block)
         else
           stream_schema(stream, &block)
@@ -41,7 +41,7 @@ module Squasher
           next
         end
 
-        yield line
+        yield line.gsub(/\A\s{,2}(.*)\s+\z/, '\1')
       end
       yield 'SQL'
     end

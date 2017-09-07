@@ -13,7 +13,6 @@ CREATE TABLE managers (
     updated_at timestamp without time zone NOT NULL
 );
 
-
 CREATE TABLE offices (
     id integer NOT NULL,
     name character varying,
@@ -47,4 +46,3 @@ ALTER TABLE ONLY schema_migrations
 INSERT INTO "schema_migrations" (version) VALUES
 ('20170831152134'),
 ('20170907145259');
-

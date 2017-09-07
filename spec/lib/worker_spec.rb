@@ -55,8 +55,8 @@ describe Squasher::Worker do
       Squasher.instance_variable_set(:@config, Squasher::Config.new)
     end
 
-    specify 'the structure mode' do
-      Squasher.config.set(:structure, true)
+    specify 'the sql mode' do
+      Squasher.config.set(:sql, true)
       worker = described_class.new(Time.new(2014))
       allow(worker).to receive(:under_squash_env).and_yield.and_return(true)
       new_migration_path = File.join(Dir.tmpdir, 'init_schema.rb')
@@ -77,64 +77,30 @@ class InitSchema < ActiveRecord::Migration
   def up
     execute <<-SQL
     CREATE TABLE cities (
-
-        id integer NOT NULL,
-
-        name character varying,
-
-        created_at timestamp without time zone NOT NULL,
-
-        updated_at timestamp without time zone NOT NULL,
-
+      id integer NOT NULL,
+      name character varying,
+      created_at timestamp without time zone NOT NULL,
+      updated_at timestamp without time zone NOT NULL,
     );
-
-
     CREATE TABLE managers (
-
-        id integer NOT NULL,
-
-        email character varying,
-
-        password_digest character varying,
-
-        created_at timestamp without time zone NOT NULL,
-
-        updated_at timestamp without time zone NOT NULL
-
+      id integer NOT NULL,
+      email character varying,
+      password_digest character varying,
+      created_at timestamp without time zone NOT NULL,
+      updated_at timestamp without time zone NOT NULL
     );
-
-
-
     CREATE TABLE offices (
-
-        id integer NOT NULL,
-
-        name character varying,
-
-        address character varying,
-
-        phone character varying,
-
-        description text,
-
-        capacity integer,
-
-        manager_id integer,
-
-        city_id integer,
-
-        created_at timestamp without time zone NOT NULL,
-
-        updated_at timestamp without time zone NOT NULL
-
+      id integer NOT NULL,
+      name character varying,
+      address character varying,
+      phone character varying,
+      description text,
+      capacity integer,
+      manager_id integer,
+      city_id integer,
+      created_at timestamp without time zone NOT NULL,
+      updated_at timestamp without time zone NOT NULL
     );
-
-
-
-
-
-
-
     SQL
   end
 

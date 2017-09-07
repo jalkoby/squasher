@@ -20,8 +20,8 @@ parser = OptionParser.new do |config|
     options[:engine] = nil
   end
 
-  config.on('-s', '--structure') do
-    options[:structure] = true
+  config.on('-s', '--sql') do
+    options[:sql] = true
   end
 
   config.on('--engine=PATH') do |value|
