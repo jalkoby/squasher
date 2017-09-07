@@ -31,15 +31,25 @@ module Squasher
 
     def stream_structure(stream)
       yield 'execute <<-SQL'
+      insert_migration = false
+      ignored_table = ['ar_internal_metadata', 'schema_migrations']
       stream.each_line do |line|
+        insert_migration = true if ignored_table.any? { |t| line.include?(t) }
+
+        if insert_migration
+          insert_migration = false if line.include?(';')
+          next
+        end
+
         yield line
       end
       yield 'SQL'
     end
 
     def stream_schema(stream)
+      inside_schema = false
+
       stream.each_line do |line|
-        inside_schema = false
         if inside_schema
           # reach the end of schema
           break if line.index("end") == 0

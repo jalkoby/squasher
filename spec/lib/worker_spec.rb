@@ -72,14 +72,78 @@ describe Squasher::Worker do
       expect(File.exists?(new_migration_path)).to be_truthy
       File.open(new_migration_path) do |stream|
         content = stream.read
-        expect(content).to include("InitSchema")
-        expect(content).to include('execute <<-SQL')
+        expect(content).to eq(<<-RUBY
+class InitSchema < ActiveRecord::Migration
+  def up
+    execute <<-SQL
+    CREATE TABLE cities (
 
-        File.open(File.join(Dir.pwd, 'spec', 'fake_app', 'db', 'structure.sql'), 'r') do |stream|
-          stream.each_line do |line|
-            expect(content).to include(line)
-          end
-        end
+        id integer NOT NULL,
+
+        name character varying,
+
+        created_at timestamp without time zone NOT NULL,
+
+        updated_at timestamp without time zone NOT NULL,
+
+    );
+
+
+    CREATE TABLE managers (
+
+        id integer NOT NULL,
+
+        email character varying,
+
+        password_digest character varying,
+
+        created_at timestamp without time zone NOT NULL,
+
+        updated_at timestamp without time zone NOT NULL
+
+    );
+
+
+
+    CREATE TABLE offices (
+
+        id integer NOT NULL,
+
+        name character varying,
+
+        address character varying,
+
+        phone character varying,
+
+        description text,
+
+        capacity integer,
+
+        manager_id integer,
+
+        city_id integer,
+
+        created_at timestamp without time zone NOT NULL,
+
+        updated_at timestamp without time zone NOT NULL
+
+    );
+
+
+
+
+
+
+
+    SQL
+  end
+
+  def down
+    raise ActiveRecord::IrreversibleMigration, "The initial migration is not revertable"
+  end
+end
+        RUBY
+      )
       end
     end
 
