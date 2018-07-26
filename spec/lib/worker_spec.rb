@@ -75,7 +75,7 @@ describe Squasher::Worker do
         expect(content).to eq(<<-RUBY
 class InitSchema < ActiveRecord::Migration
   def up
-    execute <<-SQL
+    execute %q{
     CREATE TABLE cities (
       id integer NOT NULL,
       name character varying,
@@ -101,7 +101,7 @@ class InitSchema < ActiveRecord::Migration
       created_at timestamp without time zone NOT NULL,
       updated_at timestamp without time zone NOT NULL
     );
-    SQL
+    }
   end
 
   def down
