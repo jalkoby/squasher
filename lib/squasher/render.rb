@@ -30,7 +30,7 @@ module Squasher
     private
 
     def stream_structure(stream)
-      yield 'execute <<-SQL'
+      yield 'execute %q{'
       skip_mode = false
       ignored_table = ['ar_internal_metadata', 'schema_migrations']
       stream.each_line do |line|
@@ -43,7 +43,7 @@ module Squasher
 
         yield line.gsub(/\A\s{,2}(.*)\s+\z/, '\1')
       end
-      yield 'SQL'
+      yield '}'
     end
 
     def stream_schema(stream)
