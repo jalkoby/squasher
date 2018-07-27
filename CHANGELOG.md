@@ -1,3 +1,5 @@
+- 0.6.1
+  - Escape regexp in sql mode ([@mpospelov](https://github.com/mpospelov))
 - 0.6.0
   - Support apps with sql schema ([@mpospelov](https://github.com/mpospelov))
 - 0.5.1
