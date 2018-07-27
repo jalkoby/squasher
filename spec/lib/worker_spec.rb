@@ -72,7 +72,7 @@ describe Squasher::Worker do
       expect(File.exists?(new_migration_path)).to be_truthy
       File.open(new_migration_path) do |stream|
         content = stream.read
-        expect(content).to eq(<<-RUBY
+        expect(content.strip).to eq(%q{
 class InitSchema < ActiveRecord::Migration
   def up
     execute %q{
@@ -87,7 +87,8 @@ class InitSchema < ActiveRecord::Migration
       email character varying,
       password_digest character varying,
       created_at timestamp without time zone NOT NULL,
-      updated_at timestamp without time zone NOT NULL
+      updated_at timestamp without time zone NOT NULL,
+      CONSTRAINT email_format CHECK (email ~* '^.+@.+\..+')
     );
     CREATE TABLE offices (
       id integer NOT NULL,
@@ -108,7 +109,7 @@ class InitSchema < ActiveRecord::Migration
     raise ActiveRecord::IrreversibleMigration, "The initial migration is not revertable"
   end
 end
-        RUBY
+        }.strip
       )
       end
     end

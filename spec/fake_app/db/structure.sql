@@ -10,7 +10,8 @@ CREATE TABLE managers (
     email character varying,
     password_digest character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT email_format CHECK (email ~* '^.+@.+\..+')
 );
 
 CREATE TABLE offices (
