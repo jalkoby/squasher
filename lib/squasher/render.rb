@@ -49,13 +49,17 @@ module Squasher
     def stream_schema(stream)
       inside_schema = false
 
-      stream.each_line do |line|
+      stream.each_line do |raw_line|
         if inside_schema
           # reach the end of schema
-          break if line.index("end") == 0
-          yield line.gsub(/\A\s{,2}(.*)\s+\z/, '\1')
+          break if raw_line.index("end") == 0
+          line = raw_line.gsub(/\A\s{,2}(.*)\s+\z/, '\1')
+          if line.include?('create_table')
+            line.gsub!(/(create_table.*),.* do/, '\1 do')
+          end
+          yield line
         else
-          inside_schema = true if line.include?("ActiveRecord::Schema")
+          inside_schema = true if raw_line.include?("ActiveRecord::Schema")
         end
       end
     end

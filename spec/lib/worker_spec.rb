@@ -46,7 +46,7 @@ describe Squasher::Worker do
     File.open(new_migration_path) do |stream|
       content = stream.read
       expect(content).to include("InitSchema")
-      expect(content).to include('create_table "managers", :force => true do |t|')
+      expect(content).to include('create_table "managers" do |t|')
     end
   end
 
