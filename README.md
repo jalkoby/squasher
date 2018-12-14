@@ -4,10 +4,10 @@
 [![Code Climate](https://codeclimate.com/github/jalkoby/squasher.svg)](https://codeclimate.com/github/jalkoby/squasher)
 [![Gem Version](https://badge.fury.io/rb/squasher.svg)](http://badge.fury.io/rb/squasher)
 
-## Attention
-Prio to 0.6.2 squasher could damage your real data as generate "force" tables. Please upgrade to 0.6.2 & manually clean "force" tag from the init migration
-
 Squasher compresses old ActiveRecord migrations. If you work on a big project with lots of migrations, every `rake db:migrate` might take a few seconds, or creating of a new database might take a few minutes. That's because ActiveRecord loads all those migration files. Squasher removes all the migrations and creates a single migration with the final database state of the specified date (the new migration will look like a schema).
+
+## Attention
+Prio to 0.6.2+ squasher could damage your real data as generate "force" tables. Please upgrade to 0.6.2 & manually clean "force" tag from the init migration
 
 ## Installation
 
