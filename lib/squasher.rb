@@ -46,7 +46,7 @@ module Squasher
   end
 
   def print(message, options = {})
-    puts message % options
+    puts options.empty? ? message : message % options
   end
 
   def error(*args)
