@@ -49,6 +49,21 @@ describe Squasher::Config do
       end
     end
 
+    it 'includes other database definitions provided in the command line' do
+      config.set(:databases, ["multiverse-database"])
+      config.stub_dbconfig do
+        File.open(File.join(fake_root, 'config', 'database.yml')) do |stream|
+          content = YAML.load(stream.read)
+          puts "content 2: #{ content }"
+          expect(content["development"]["database"]).to eq("squasher")
+          expect(content["development"]["encoding"]).to eq("utf-8")
+          expect(content["multiverse-database"]["database"]).to eq("multiverse-database")
+          expect(content["multiverse-database"]["user"]).to eq("multiverse-user")
+          expect(content).not_to have_key("another_development")
+        end
+      end
+    end
+
     def file_exists?(*parts)
       File.exists?(File.join(fake_root, *parts))
     end
