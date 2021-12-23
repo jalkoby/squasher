@@ -54,7 +54,6 @@ describe Squasher::Config do
       config.stub_dbconfig do
         File.open(File.join(fake_root, 'config', 'database.yml')) do |stream|
           content = YAML.load(stream.read)
-          puts "content 2: #{ content }"
           expect(content["development"]["database"]).to eq("squasher")
           expect(content["development"]["encoding"]).to eq("utf-8")
           expect(content["multiverse-database"]["database"]).to eq("multiverse-database")
