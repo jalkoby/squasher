@@ -10,7 +10,12 @@ module Squasher
       def process(path)
         @error = false
 
-        str = YAML.load(ERB.new(File.read(path)).result(binding))
+        str = begin
+          # Support for Psych 4 (the default yaml parser for Ruby 3.1)
+          YAML.load(ERB.new(File.read(path)).result(binding), aliases: true)
+        rescue
+          YAML.load(ERB.new(File.read(path)).result(binding))
+        end
         [str, @error]
       end
 
