@@ -16,3 +16,7 @@ another_test:
   database: another_test
   user: root
   password: password
+multiverse-database:
+  database: multiverse-database
+  user: multiverse-user
+  password: multiverse-password

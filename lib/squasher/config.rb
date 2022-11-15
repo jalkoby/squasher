@@ -39,6 +39,7 @@ module Squasher
       @root_path = Dir.pwd.freeze
       @migrations_folder = File.join(@root_path, 'db', 'migrate')
       @flags = []
+      @databases = []
       set_app_path(@root_path)
     end
 
@@ -60,6 +61,8 @@ module Squasher
       elsif key == :sql
         @schema_file = File.join(@app_path, 'db', 'structure.sql')
         @flags << key
+      elsif key == :databases
+        @databases = value
       else
         @flags << key
       end
@@ -123,6 +126,7 @@ module Squasher
         content, soft_error = Render.process(dbconfig_file)
         if content.has_key?('development')
           @dbconfig = { 'development' => content['development'].merge('database' => 'squasher') }
+          @databases&.each { |database| @dbconfig[database] = content[database] }
         end
       rescue
       end

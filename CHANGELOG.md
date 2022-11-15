@@ -1,3 +1,5 @@
+- 0.7.0
+  - Support the presence of multiverse ([@mlohbihler](https://github.com/mlohbihler))
 - 0.6.1
   - Escape regexp in sql mode ([@mpospelov](https://github.com/mpospelov))
 - 0.6.0

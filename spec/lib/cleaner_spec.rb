@@ -5,7 +5,7 @@ describe Squasher::Cleaner do
   let(:expected_file) { File.join(fake_root, 'db', 'migrate', '20140102030405_squasher_clean.rb') }
 
   before do
-    allow(Time).to receive(:now).and_return(Time.new(2014, 1, 2, 3, 4, 5))
+    allow(Time).to receive(:now).and_return(Time.utc(2014, 1, 2, 3, 4, 5))
     allow(Squasher).to receive(:rake).with("db:migrate", :db_cleaning)
   end
 

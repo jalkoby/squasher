@@ -32,6 +32,10 @@ parser = OptionParser.new do |config|
     options[:engine] = value
   end
 
+  config.on('--databases=DB_KEY,...', 'alternate database configuration keys to be included dbconfig (for multiverse)') do |value|
+    options[:databases] = value&.split(",")
+  end
+
   config.on('-v', '--version', '-h', '--help', 'show this message')
 end
 parser.parse!

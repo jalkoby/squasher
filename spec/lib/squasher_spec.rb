@@ -46,4 +46,12 @@ describe Squasher do
       Squasher.rake('db:migrate')
     end
   end
+
+  context '.print' do
+    context 'when options are empty' do
+      it 'prints the message without error' do
+        Squasher.print('asdf % asdf', {})
+      end
+    end
+  end
 end
