@@ -81,7 +81,7 @@ module Squasher
     end
 
     def migrations_folder?
-      Dir.exists?(migrations_folder)
+      Dir.exist?(migrations_folder)
     end
 
     def dbconfig?
@@ -93,7 +93,7 @@ module Squasher
 
       list = [dbconfig_file, schema_file]
       list.each do |file|
-        next unless File.exists?(file)
+        next unless File.exist?(file)
         FileUtils.mv file, "#{ file }.sq"
       end
 
@@ -103,7 +103,7 @@ module Squasher
 
     ensure
       list.each do |file|
-        next unless File.exists?("#{ file }.sq")
+        next unless File.exist?("#{ file }.sq")
         FileUtils.mv "#{ file }.sq", file
       end
     end
@@ -118,7 +118,7 @@ module Squasher
 
     def dbconfig
       return @dbconfig if defined?(@dbconfig)
-      return @dbconfig = nil unless File.exists?(dbconfig_file)
+      return @dbconfig = nil unless File.exist?(dbconfig_file)
 
       @dbconfig = nil
 

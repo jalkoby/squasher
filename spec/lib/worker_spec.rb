@@ -42,7 +42,7 @@ describe Squasher::Worker do
 
     worker.process
 
-    expect(File.exists?(new_migration_path)).to be_truthy
+    expect(File.exist?(new_migration_path)).to be_truthy
     File.open(new_migration_path) do |stream|
       content = stream.read
       expect(content).to include("InitSchema")
@@ -69,7 +69,7 @@ describe Squasher::Worker do
       expect(Squasher).to receive(:ask).with(:apply_clean).and_return(false)
       worker.process
 
-      expect(File.exists?(new_migration_path)).to be_truthy
+      expect(File.exist?(new_migration_path)).to be_truthy
       File.open(new_migration_path) do |stream|
         content = stream.read
         expect(content.strip).to eq(%q{

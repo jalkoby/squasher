@@ -64,7 +64,7 @@ describe Squasher::Config do
     end
 
     def file_exists?(*parts)
-      File.exists?(File.join(fake_root, *parts))
+      File.exist?(File.join(fake_root, *parts))
     end
   end
 
