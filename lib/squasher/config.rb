@@ -9,8 +9,9 @@ module Squasher
 
       def process(path)
         @error = false
-
-        str = YAML.load(ERB.new(File.read(path)).result(binding))
+        # Support for Psych 4 (the default yaml parser for Ruby 3.1)
+        opts = Gem::Version.new(Psych::VERSION).segments.first < 4 ? {} : { aliases: true }
+        str = YAML.load(ERB.new(File.read(path)).result(binding), **opts)
         [str, @error]
       end
 
