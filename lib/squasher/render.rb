@@ -14,7 +14,11 @@ module Squasher
     end
 
     def render
-      ERB.new(template("#{ name }.rb"), nil, '-').result(binding)
+      if RUBY_VERSION < '2.6'
+        ERB.new(template("#{ name }.rb"), nil, '-').result(binding)
+      else
+        ERB.new(template("#{ name }.rb"), trim_mode: '-').result(binding)
+      end
     end
 
     def each_schema_line(&block)
