@@ -34,7 +34,7 @@ module Squasher
       end
     end
 
-    attr_reader :schema_file, :migration_version, :multi_db_format, :databases
+    attr_reader :migration_version, :multi_db_format, :databases
 
     def initialize
       @root_path = Dir.pwd.freeze
@@ -59,9 +59,6 @@ module Squasher
       elsif key == :migration
         Squasher.error(:invalid_migration_version, value: value) unless value.to_s =~ /\A\d.\d\z/
         @migration_version = "[#{value}]"
-      elsif key == :sql
-        @schema_file = File.join(@app_path, 'db', 'structure.sql')
-        @flags << key
       elsif key == :multi_db_format
         Squasher.error(:invalid_multi_db_format, value: value) unless %w[rails multiverse].include?(value)
         @multi_db_format = value
@@ -74,6 +71,19 @@ module Squasher
 
     def set?(k)
       @flags.include?(k)
+    end
+
+    def schema_files
+      return [schema_file] unless @multi_db_format == 'rails'
+
+      @databases.map { |db| schema_file(db) }
+    end
+
+    def schema_file(database = nil)
+      prefix = database.nil? || database == 'primary' ? '' : "#{ database }_"
+      file = set?(:sql) ? 'structure.sql' : 'schema.rb'
+
+      File.join(@app_path, 'db', "#{ prefix }#{ file }")
     end
 
     def migration_files(database = nil)
@@ -112,7 +122,7 @@ module Squasher
     def stub_dbconfig
       return unless dbconfig?
 
-      list = [dbconfig_file, schema_file]
+      list = [dbconfig_file, *schema_files]
       list.each do |file|
         next unless File.exist?(file)
         FileUtils.mv file, "#{ file }.sq"
@@ -179,7 +189,6 @@ module Squasher
 
     def set_app_path(path)
       @app_path = path
-      @schema_file = File.join(path, 'db', 'schema.rb')
       @dbconfig_file = File.join(path, 'config', 'database.yml')
     end
   end

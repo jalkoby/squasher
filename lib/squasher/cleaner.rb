@@ -26,7 +26,7 @@ module Squasher
         FileUtils.rm(prev_migration)
       end
       File.open(migration_file, 'wb') do |stream|
-        stream << ::Squasher::Render.render(MIGRATION_NAME, config)
+        stream << ::Squasher::Render.render(MIGRATION_NAME, config, database)
       end
 
       if database.nil?

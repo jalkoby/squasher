@@ -72,8 +72,8 @@ module Squasher
 
     def clean_migrations(database = nil)
       path = config.migration_file(finish_timestamp(database), :init_schema, database)
-      File.open(path, 'wb') { |io| io << Render.render(:init_schema, config) }
-      migrations(database).each { |file| FileUtils.rm(file) }
+      migrations(database).each { |file| FileUtils.rm(file) } # Remove all migrations before creating the new one
+      File.open(path, 'wb') { |io| io << Render.render(:init_schema, config, database) }
     end
 
     def before_date?(timestamp)
