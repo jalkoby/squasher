@@ -34,12 +34,12 @@ module Squasher
       end
     end
 
-    attr_reader :schema_file, :migration_version
+    attr_reader :migration_version, :multi_db_format, :databases
 
     def initialize
       @root_path = Dir.pwd.freeze
-      @migrations_folder = File.join(@root_path, 'db', 'migrate')
       @flags = []
+      @multi_db_format = nil
       @databases = []
       set_app_path(@root_path)
     end
@@ -59,9 +59,9 @@ module Squasher
       elsif key == :migration
         Squasher.error(:invalid_migration_version, value: value) unless value.to_s =~ /\A\d.\d\z/
         @migration_version = "[#{value}]"
-      elsif key == :sql
-        @schema_file = File.join(@app_path, 'db', 'structure.sql')
-        @flags << key
+      elsif key == :multi_db_format
+        Squasher.error(:invalid_multi_db_format, value: value) unless %w[rails multiverse].include?(value)
+        @multi_db_format = value
       elsif key == :databases
         @databases = value
       else
@@ -73,16 +73,46 @@ module Squasher
       @flags.include?(k)
     end
 
-    def migration_files
-      Dir.glob(File.join(migrations_folder, '**.rb'))
+    def schema_files
+      return [schema_file] unless @multi_db_format == 'rails'
+
+      @databases.map { |db| schema_file(db) }
     end
 
-    def migration_file(timestamp, migration_name)
-      File.join(migrations_folder, "#{ timestamp }_#{ migration_name }.rb")
+    def schema_file(database = nil)
+      prefix = database.nil? || database == 'primary' ? '' : "#{ database }_"
+      file = set?(:sql) ? 'structure.sql' : 'schema.rb'
+
+      File.join(@app_path, 'db', "#{ prefix }#{ file }")
     end
 
-    def migrations_folder?
-      Dir.exist?(migrations_folder)
+    def migration_files(database = nil)
+      Dir.glob(File.join(migrations_folder(database), '**.rb'))
+    end
+
+    def migration_file(timestamp, migration_name, database = nil)
+      File.join(migrations_folder(database), "#{ timestamp }_#{ migration_name }.rb")
+    end
+
+    def migrations_folder(database = nil)
+      return default_migration_folder if database.nil?
+
+      migrations_paths = dbconfig['development'][database]['migrations_paths']
+      return default_migration_folder unless migrations_paths
+
+      File.join(@app_path, migrations_paths)
+    end
+
+    def migrations_folders?
+      if @multi_db_format != 'rails'
+        Dir.exist?(migrations_folder)
+      else
+        @databases.all? { |db| Dir.exist?(migrations_folder(db)) }
+      end
+    end
+
+    def default_migration_folder
+      File.join(@root_path, 'db', 'migrate')
     end
 
     def dbconfig?
@@ -92,7 +122,7 @@ module Squasher
     def stub_dbconfig
       return unless dbconfig?
 
-      list = [dbconfig_file, schema_file]
+      list = [dbconfig_file, *schema_files]
       list.each do |file|
         next unless File.exist?(file)
         FileUtils.mv file, "#{ file }.sq"
@@ -115,7 +145,7 @@ module Squasher
 
     private
 
-    attr_reader :migrations_folder, :dbconfig_file
+    attr_reader :dbconfig_file
 
     def dbconfig
       return @dbconfig if defined?(@dbconfig)
@@ -126,8 +156,27 @@ module Squasher
       begin
         content, soft_error = Render.process(dbconfig_file)
         if content.has_key?('development')
-          @dbconfig = { 'development' => content['development'].merge('database' => 'squasher') }
-          @databases&.each { |database| @dbconfig[database] = content[database] }
+          if @multi_db_format == 'rails'
+            @dbconfig = { 'development' => {} }
+            @databases.each do |database|
+              @dbconfig['development'][database] = content['development'][database].merge('database' => "#{database}_squasher")
+              
+              database_name = content['development'][database]['database']
+              content['development'].select { |_, v| v['database'] == database_name && v['replica'] }.each do |k, v|
+                @dbconfig['development'][k] = v.merge('database' => "#{database}_squasher")
+              end
+            end
+          else
+            @dbconfig = { 'development' => content['development'].merge('database' => 'squasher') }
+
+            multiverse_by_default = @multi_db_format.nil? && @databases.any?
+            if multiverse_by_default
+              puts "Using multiverse format by default is deprecated and will be removed in the next major release. Please specify --multi-db_format=rails or --multi-db_format=multiverse explicitly."
+            end
+            if multiverse_by_default || @multi_db_format == 'multiverse'
+              @databases&.each { |database| @dbconfig[database] = content[database] }
+            end
+          end
         end
       rescue
       end
@@ -140,7 +189,6 @@ module Squasher
 
     def set_app_path(path)
       @app_path = path
-      @schema_file = File.join(path, 'db', 'schema.rb')
       @dbconfig_file = File.join(path, 'config', 'database.yml')
     end
   end

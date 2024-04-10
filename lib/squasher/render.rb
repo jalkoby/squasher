@@ -8,9 +8,10 @@ module Squasher
 
     attr_reader :name, :config
 
-    def initialize(name, config)
+    def initialize(name, config, database = nil)
       @name = name
       @config = config
+      @database = database
     end
 
     def render
@@ -22,7 +23,7 @@ module Squasher
     end
 
     def each_schema_line(&block)
-      File.open(config.schema_file, 'r') do |stream|
+      File.open(config.schema_file(@database), 'r') do |stream|
         if @config.set?(:sql)
           stream_structure(stream, &block)
         else

@@ -1,3 +1,5 @@
+- 0.8.0
+  - Support multiple databases in Rails-style ([@fynsta](https://github.com/fynsta))
 - 0.7.0
   - Support the presence of multiverse ([@mlohbihler](https://github.com/mlohbihler))
 - 0.6.1

@@ -6,7 +6,7 @@ describe Squasher::Worker do
     let(:worker) { described_class.new(Time.new(2012, 6, 20)) }
 
     specify 'command was run not in application root' do
-      allow_any_instance_of(Squasher::Config).to receive(:migrations_folder?).and_return(false)
+      allow_any_instance_of(Squasher::Config).to receive(:migrations_folders?).and_return(false)
 
       expect_exit_with(:migration_folder_missing)
     end
@@ -31,7 +31,7 @@ describe Squasher::Worker do
     worker = described_class.new(Time.new(2014))
     allow(worker).to receive(:under_squash_env).and_yield.and_return(true)
     new_migration_path = File.join(Dir.tmpdir, 'init_schema.rb')
-    allow_any_instance_of(Squasher::Config).to receive(:migration_file).with('20131213090719', :init_schema).and_return(new_migration_path)
+    allow_any_instance_of(Squasher::Config).to receive(:migration_file).with('20131213090719', :init_schema, nil).and_return(new_migration_path)
 
     expect(FileUtils).to receive(:rm).with(File.join(fake_root, 'db', 'migrate', '20131205160936_first_migration.rb'))
     expect(FileUtils).to receive(:rm).with(File.join(fake_root, 'db', 'migrate', '20131213090719_second_migration.rb'))
@@ -60,7 +60,7 @@ describe Squasher::Worker do
       worker = described_class.new(Time.new(2014))
       allow(worker).to receive(:under_squash_env).and_yield.and_return(true)
       new_migration_path = File.join(Dir.tmpdir, 'init_schema.rb')
-      allow_any_instance_of(Squasher::Config).to receive(:migration_file).with('20131213090719', :init_schema).and_return(new_migration_path)
+      allow_any_instance_of(Squasher::Config).to receive(:migration_file).with('20131213090719', :init_schema, nil).and_return(new_migration_path)
       expect(FileUtils).to receive(:rm).with(File.join(fake_root, 'db', 'migrate', '20131205160936_first_migration.rb'))
       expect(FileUtils).to receive(:rm).with(File.join(fake_root, 'db', 'migrate', '20131213090719_second_migration.rb'))
 
